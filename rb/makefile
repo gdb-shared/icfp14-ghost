@@ -4,3 +4,5 @@ default:
 	$R grub.rb < test.rb
 %: %.rb
 	$R grub.rb < $@.rb
+%.pb: %.rb
+	$R grub.rb < $*.rb | pbcopy
