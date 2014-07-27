@@ -9,10 +9,14 @@ fun('main') {
   @ghost_x = 254
   @ghost_y = 255
   int 3
+  and2 $a, 1
+  jeq :hunt_vert,$a,0
+}
+fun('hunt_vert') {
+  int 3
   int 6 # a,b <= vit,dir
   mov [@vitality], $a
   mov [@prev_dir], $b
-  # In theory, we should reverse if vitality is 1
   int 3 # a <= ghost
   int 5 # a,b <= x,y ghost
   mov [@ghost_x], $a
@@ -43,7 +47,9 @@ fun('main') {
 
   label :GO_RIGHT
   mov [@new_dir], $right
-
+  goto :FINISH
+}
+fun("FINISH") {
   label :FINISH
   mov $c,[@vitality]
   int 8
