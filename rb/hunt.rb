@@ -9,11 +9,6 @@ fun('main') {
   @ghost_x = 254
   @ghost_y = 255
   int 3
-  and2 $a, 1
-  jeq :hunt_vert,$a,0
-}
-fun('hunt_vert') {
-  int 3
   int 6 # a,b <= vit,dir
   mov [@vitality], $a
   mov [@prev_dir], $b
@@ -25,6 +20,12 @@ fun('hunt_vert') {
   mov [@pac_x], $a
   mov [@pac_y], $b
 
+  # Choose preferred axis.
+  int 3
+  and2 $a, 1
+  jeq :hunt_horz,$a,0
+}
+fun('hunt_vert') {
   jlt :RIGHT,[@ghost_x],[@pac_x]
   jlt :GO_DOWN,[@ghost_y],[@pac_y]
   jgt :GO_UP,[@ghost_y],[@pac_y]
@@ -48,6 +49,31 @@ fun('hunt_vert') {
   label :GO_RIGHT
   mov [@new_dir], $right
   goto :FINISH
+}
+fun('hunt_horz') {
+  jlt :HDOWN,[@ghost_x],[@pac_x]
+  jlt :HGO_RIGHT,[@ghost_y],[@pac_y]
+  jgt :HGO_LEFT,[@ghost_y],[@pac_y]
+
+  label :HGO_UP
+  mov [@new_dir], $left
+  goto :FINISH
+
+  label :HGO_RIGHT
+  mov [@new_dir], $down
+  goto :FINISH
+
+  label :HGO_LEFT
+  mov [@new_dir], $up
+  goto :FINISH
+
+  label :HDOWN
+  jlt :HGO_RIGHT,[@ghost_y],[@pac_y]
+  jgt :HGO_LEFT,[@ghost_y],[@pac_y]
+
+  label :HGO_UP
+  mov [@new_dir], $right
+  #goto :FINISH
 }
 fun("FINISH") {
   label :FINISH
