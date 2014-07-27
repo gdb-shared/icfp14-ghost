@@ -6,19 +6,21 @@ fun('main') {
   # run0 'hunt_main'
 }
 fun('hunt_main') {
+  @counter = 249
+  @rand = 250
   @new_dir = 251
+  @pac_x = 252
+  @pac_y = 253
+  @ghost_x = 254
+  @ghost_y = 255
   int 3
   int 6 # a,b <= vit,dir
   # In theory, we should reverse if vitality is 1
   int 3 # a <= ghost
   int 5 # a,b <= x,y ghost
-  @ghost_x = 254
-  @ghost_y = 255
   mov [@ghost_x], $a
   mov [@ghost_y], $b
   int 1 # a,b <= x,y pac
-  @pac_x = 252
-  @pac_y = 253
   mov [@pac_x], $a
   mov [@pac_y], $b
 
@@ -46,8 +48,24 @@ fun('hunt_main') {
   mov [@new_dir], $right
 
   label :FINISH
+  inc [@counter]
+  jlt :RANDOMIZE,[@counter],3
+  mov [@counter],0
+  goto :SET_DIR
+
+  label :RANDOMIZE
+  # Compute a random number.
+  add [@rand],[@pac_x]
+  add [@rand],[@pac_x]
+  add [@rand],[@ghost_x]
+  add [@rand],[@ghost_x]
+  mov [@new_dir],[@rand]
+  and2 [@new_dir],3
+
+  label :SET_DIR
   mov $a,[@new_dir]
   int 0  # from $a
+  #int 8
   hlt
 }
 fun('fickle_main') {
