@@ -1,11 +1,6 @@
 fun('main') {
-  #@counter = 251
-  #inc [@counter]
-  #jlt :fickle_main, [@counter], 3
-  #mov [@counter], 0
-  # run0 'hunt_main'
-}
-fun('hunt_main') {
+  @prev_dir = 247
+  @vitality = 248
   @counter = 249
   @rand = 250
   @new_dir = 251
@@ -15,6 +10,8 @@ fun('hunt_main') {
   @ghost_y = 255
   int 3
   int 6 # a,b <= vit,dir
+  mov [@vitality], $a
+  mov [@prev_dir], $b
   # In theory, we should reverse if vitality is 1
   int 3 # a <= ghost
   int 5 # a,b <= x,y ghost
@@ -48,6 +45,7 @@ fun('hunt_main') {
   mov [@new_dir], $right
 
   label :FINISH
+  jeq :REVERSE,[@vitality],1
   inc [@counter]
   mov $b, [@counter]
   int 3
@@ -63,34 +61,16 @@ fun('hunt_main') {
   add [@rand],[@pac_x]
   add [@rand],[@ghost_x]
   add [@rand],[@ghost_x]
+  add [@rand],[@prev_dir]  # useful?
   mov [@new_dir],[@rand]
   and2 [@new_dir],3
+  goto :SET_DIR
+
+  label :REVERSE
+  add [@new_dir],2
 
   label :SET_DIR
   mov $a,[@new_dir]
   int 0  # from $a
-  #int 8
-  hlt
-}
-fun('fickle_main') {
-  mov $a,255
-  mov $b,0
-  mov $c,255
-
-  label :FICKLE_INC
-  inc $c
-  jgt :FICKLE_LOOP,[$c],$a
-
-  mov $a,[$c]
-  mov $b,$c
-  label :FICKLE_LOOP
-  jlt :FICKLE_INC,$c,3
-
-  mov $a,$b
-  int 0
-
-  int 3
-  int 6
-  inc [$b]
   hlt
 }
