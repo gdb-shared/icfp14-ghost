@@ -45,12 +45,13 @@ fun('main') {
   mov [@new_dir], $right
 
   label :FINISH
+  mov $c,[@vitality]
+  int 8
   jeq :REVERSE,[@vitality],1
   inc [@counter]
   mov $b, [@counter]
   int 3
   add $a,2
-  int 8
   jlt :RANDOMIZE,[@counter],$a
   mov [@counter],0
   goto :SET_DIR
@@ -61,13 +62,14 @@ fun('main') {
   add [@rand],[@pac_x]
   add [@rand],[@ghost_x]
   add [@rand],[@ghost_x]
-  add [@rand],[@prev_dir]  # useful?
+  #add [@rand],[@prev_dir]  # useful?
   mov [@new_dir],[@rand]
   and2 [@new_dir],3
   goto :SET_DIR
 
   label :REVERSE
   add [@new_dir],2
+  int 8
 
   label :SET_DIR
   mov $a,[@new_dir]
