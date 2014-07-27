@@ -49,7 +49,11 @@ fun('hunt_main') {
 
   label :FINISH
   inc [@counter]
-  jlt :RANDOMIZE,[@counter],3
+  mov $b, [@counter]
+  int 3
+  add $a,2
+  int 8
+  jlt :RANDOMIZE,[@counter],$a
   mov [@counter],0
   goto :SET_DIR
 
