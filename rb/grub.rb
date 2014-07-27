@@ -78,6 +78,9 @@ class Compiler
     targ, x, y = [targ,x,y].map {|_| addr(_)}
     emit("#{__method__.upcase} #{targ},#{x},#{y}")
   end
+  def trace()
+    emit("int 8")
+  end
   def goto(label)
     emit("jeq %{#{label}},0,0 ; goto '#{label}'")
   end

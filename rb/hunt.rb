@@ -77,8 +77,6 @@ fun('hunt_horz') {
 }
 fun("FINISH") {
   label :FINISH
-  mov $c,[@vitality]
-  int 8
   jeq :REVERSE,[@vitality],1
   inc [@counter]
   mov $b, [@counter]
@@ -101,7 +99,6 @@ fun("FINISH") {
 
   label :REVERSE
   add [@new_dir],2
-  int 8
 
   label :SET_DIR
   mov $a,[@new_dir]
