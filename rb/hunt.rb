@@ -1,11 +1,12 @@
 fun('main') {
-  @counter = 251
-  inc [@counter]
-  jlt :fickle_main, [@counter], 3
-  mov [@counter], 0
-  #run0 'hunt_main'
+  #@counter = 251
+  #inc [@counter]
+  #jlt :fickle_main, [@counter], 3
+  #mov [@counter], 0
+  # run0 'hunt_main'
 }
 fun('hunt_main') {
+  @new_dir = 251
   int 3
   int 6 # a,b <= vit,dir
   # In theory, we should reverse if vitality is 1
@@ -26,15 +27,15 @@ fun('hunt_main') {
   jgt :GO_UP,[@ghost_y],[@pac_y]
 
   label :GO_LEFT
-  mov $a, $left
+  mov [@new_dir], $left
   goto :FINISH
 
   label :GO_DOWN
-  mov $a, $down
+  mov [@new_dir], $down
   goto :FINISH
 
   label :GO_UP
-  mov $a, $up
+  mov [@new_dir], $up
   goto :FINISH
 
   label :RIGHT
@@ -42,9 +43,10 @@ fun('hunt_main') {
   jgt :GO_UP,[@ghost_y],[@pac_y]
 
   label :GO_RIGHT
-  mov $a, $right
+  mov [@new_dir], $right
 
   label :FINISH
+  mov $a,[@new_dir]
   int 0  # from $a
   hlt
 }
