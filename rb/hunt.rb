@@ -1,4 +1,6 @@
 fun('main') {
+  @mode_counter = 244
+  @mode = 245
   @global_counter = 246
   @prev_dir = 247
   @vitality = 248
@@ -104,11 +106,48 @@ fun("FINISH") {
   int 5
   add [@rand],$a
   add [@rand],$b
+  #add [@rand],[@prev_dir]  # useful?
+
+  # If mode_counter is 0, update mode based
+  # on random number. Then flip.
+  mov $h,[@mode_counter]
+  mov $g,[@mode]
+  int 8
+  jgt :DEC_MODE_COUNTER,[@mode_counter],0
+
+  # $d := (rand % 3) + ghost_index
+  mov $c,[@rand]
+  div $c,3
+  mul $c,3
+  mov $d,[@rand]
+  sub $d,$c
+  int 3
+  add $d,$a
+
+  # Create more entropy.
   mov $a,3
   int 5
   add [@rand],$a
   add [@rand],$b
-  #add [@rand],[@prev_dir]  # useful?
+
+  # Now, $e := rand % $d
+  mov $c,[@rand]
+  div $c,$d
+  mul $c,$d
+  mov $e,[@rand]
+  sub $e,$c
+   #mov $f,[@rand]
+  int 8
+  mov [@mode_counter],$e
+  xor [@mode],1
+
+  label :DEC_MODE_COUNTER
+  inc [@mode_counter]
+
+  # mode 0 => non-random
+  jeq :SET_DIR,[@mode],0
+
+  label :RANDOM_MOVE
   mov [@new_dir],[@rand]
   and2 [@new_dir],3
   goto :SET_DIR
