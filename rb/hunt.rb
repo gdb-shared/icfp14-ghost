@@ -81,15 +81,8 @@ fun('hunt_horz') {
 }
 fun("FINISH") {
   jeq :REVERSE,[@vitality],1
-  inc [@counter]
-  mov $b, [@counter]
-  int 3
-  add $a,2
-  jlt :RANDOMIZE,[@counter],$a
-  mov [@counter],0
-  goto :SET_DIR
 
-  label :RANDOMIZE
+  #label :RANDOMIZE
   # Compute a random number.
   add [@rand],[@global_counter] # important to move 1s bit
   add [@rand],[@pac_x]
@@ -110,12 +103,12 @@ fun("FINISH") {
 
   # If mode_counter is 0, update mode based
   # on random number. Then flip.
-  mov $h,[@mode_counter]
-  mov $g,[@mode]
+  mov $g,[@mode_counter]
+  mov $h,[@mode]
   int 8
   jgt :DEC_MODE_COUNTER,[@mode_counter],0
 
-  # $d := (rand % 3) + ghost_index
+  # $d := (rand % 3) + ghost_index + 1
   mov $c,[@rand]
   div $c,3
   mul $c,3
@@ -123,6 +116,8 @@ fun("FINISH") {
   sub $d,$c
   int 3
   add $d,$a
+  add $d,1 # divisor cannot be 0!
+  #int 8
 
   # Create more entropy.
   mov $a,3
@@ -137,12 +132,15 @@ fun("FINISH") {
   mov $e,[@rand]
   sub $e,$c
    #mov $f,[@rand]
-  int 8
+  #int 8
   mov [@mode_counter],$e
+
+  # flip mode
   xor [@mode],1
 
-  label :DEC_MODE_COUNTER
   inc [@mode_counter]
+  label :DEC_MODE_COUNTER
+  dec [@mode_counter]
 
   # mode 0 => non-random
   jeq :SET_DIR,[@mode],0
