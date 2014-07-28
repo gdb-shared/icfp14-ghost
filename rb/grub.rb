@@ -54,6 +54,22 @@ class Compiler
     dst, src = [dst,src].map {|x| addr(x)}
     emit("#{__method__.upcase} #{dst},#{src}")
   end
+  def sub(dst,src)
+    dst, src = [dst,src].map {|x| addr(x)}
+    emit("#{__method__.upcase} #{dst},#{src}")
+  end
+  def mul(dst,src)
+    dst, src = [dst,src].map {|x| addr(x)}
+    emit("#{__method__.upcase} #{dst},#{src}")
+  end
+  def div(dst,src)
+    dst, src = [dst,src].map {|x| addr(x)}
+    emit("#{__method__.upcase} #{dst},#{src}")
+  end
+  def xor(dst,src)
+    dst, src = [dst,src].map {|x| addr(x)}
+    emit("#{__method__.upcase} #{dst},#{src}")
+  end
   def inc(dst)
     dst, = [dst].map {|x| addr(x)}
     emit("#{__method__.upcase} #{dst}")
