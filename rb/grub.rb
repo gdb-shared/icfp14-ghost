@@ -82,6 +82,10 @@ class Compiler
     x, y = [x,y].map {|_| addr(_)}
     emit("AND #{x},#{y}")
   end
+  def or2(x, y)
+    x, y = [x,y].map {|_| addr(_)}
+    emit("AND #{x},#{y}")
+  end
   def jeq(targ, x, y)
     targ, x, y = [targ,x,y].map {|_| addr(_)}
     emit("#{__method__.upcase} #{targ},#{x},#{y}")
