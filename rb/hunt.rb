@@ -1,4 +1,5 @@
 fun('main') {
+  @global_counter = 246
   @prev_dir = 247
   @vitality = 248
   @counter = 249
@@ -8,6 +9,7 @@ fun('main') {
   @pac_y = 253
   @ghost_x = 254
   @ghost_y = 255
+  inc [@global_counter]
   int 3
   int 6 # a,b <= vit,dir
   mov [@vitality], $a
@@ -76,7 +78,6 @@ fun('hunt_horz') {
   #goto :FINISH
 }
 fun("FINISH") {
-  label :FINISH
   jeq :REVERSE,[@vitality],1
   inc [@counter]
   mov $b, [@counter]
@@ -88,10 +89,25 @@ fun("FINISH") {
 
   label :RANDOMIZE
   # Compute a random number.
+  add [@rand],[@global_counter] # important to move 1s bit
   add [@rand],[@pac_x]
   add [@rand],[@pac_x]
-  add [@rand],[@ghost_x]
-  add [@rand],[@ghost_x]
+  mov $a,0
+  int 5
+  add [@rand],$a
+  add [@rand],$b
+  mov $a,1
+  int 5
+  add [@rand],$a
+  add [@rand],$b
+  mov $a,2
+  int 5
+  add [@rand],$a
+  add [@rand],$b
+  mov $a,3
+  int 5
+  add [@rand],$a
+  add [@rand],$b
   #add [@rand],[@prev_dir]  # useful?
   mov [@new_dir],[@rand]
   and2 [@new_dir],3
@@ -103,5 +119,6 @@ fun("FINISH") {
   label :SET_DIR
   mov $a,[@new_dir]
   int 0  # from $a
+  mov $c, [@rand]
   hlt
 }
